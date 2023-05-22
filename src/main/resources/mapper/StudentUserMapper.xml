@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.StudentUserMapper">
+
+    <select id="findAll" resultType="com.entity.StudentUser">
+        select * from student_table
+    </select>
+
+    <select id="findByXuehaoAndEmail" resultType="com.entity.StudentUser">
+      select * from student_table
+      where xuehao =#{xuehao} and email=#{email}
+    </select>
+
+    <select id="findByXuehaoAndEmailAndMibao" resultType="com.entity.StudentUser">
+        select * from student_table
+        where xuehao =#{xuehao} and email=#{email} and mibao =#{mibao}
+    </select>
+    <select id="findByXuehao" resultType="com.entity.StudentUser">
+        select * from student_table
+        where xuehao =#{xuehao}
+    </select>
+
+
+    <delete id="deleteByXuehao">
+        delete from student_table
+        where xuehao=#{xuehao}
+    </delete>
+
+    <select id="getByXuehaoAndPassword" resultType="com.entity.StudentUser">
+        select * from student_table
+        where xuehao =#{xuehao} and password=#{password}
+    </select>
+
+    <select id="getByCollegegroup" resultType="java.lang.String">
+        select college from student_table GROUP BY college
+    </select>
+
+    <select id="getByMajorgroup" resultType="java.lang.String">
+        select major from student_table GROUP BY major
+    </select>
+
+    <select id="getByBanjigroup" resultType="java.lang.String">
+        select banji from student_table GROUP BY banji
+    </select>
+
+    <select id="findByXhinBJ" resultType="java.lang.Integer">
+        select a.xuehao from student_table as a where a.banji=#{banji}
+    </select>
+
+    <select id="getAllSelection" resultType="java.util.Map">
+        select b.ctime,a.name,a.xuehao,a.sex,a.college,a.major,a.banji
+        from selection_table as b,student_table as a where b.kechengid=#{kechengid} and a.xuehao=b.xuehao
+    </select>
+
+    <select id="SelecttionNo" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao} order by a.kechengid
+    </select>
+
+
+    <select id="SelectionLeixing" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao} and b.kechengleibie=#{kechengleibie} order by a.kechengid
+    </select>
+
+    <select id="SelectionLike" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao}
+        and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%'))  order by a.kechengid
+    </select>
+
+    <select id="SelectionXuefen" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao} and b.xuefen=#{xuefen}  order by a.kechengid
+    </select>
+
+    <select id="SelectionXandLike" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao} and b.xuefen=#{xuefen}
+        and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%')) order by a.kechengid
+    </select>
+
+    <select id="SelectionXandLeibie" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao} and b.xuefen=#{xuefen}
+        and b.kechengleibie=#{kechengleibie} order by a.kechengid
+    </select>
+
+    <select id="SelectionLandLiebie" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao}
+        and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%')) and b.kechengleibie=#{kechengleibie} order by a.kechengid
+    </select>
+
+    <select id="SelectionAll" resultType="java.util.Map">
+        select  a.ctime,a.id,b.kechengid,b.kechengname,b.kechengleibie,c.`name`,b.xuefen
+        from selection_table as a,curriculum_table as b,teacher_table as c
+        where a.kechengid=b.kechengid and b.kechengteacher=c.zhanghu and a.xuehao=#{xuehao}
+        and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%')) and b.kechengleibie=#{kechengleibie}
+        and b.xuefen=#{xuefen} and b.kechengleibie=#{kechengleibie} order by a.kechengid
+    </select>
+</mapper>

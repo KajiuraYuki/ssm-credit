@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.MajorMapper">
+
+    <delete id="deleteByMajorid">
+        delete from major_table where majorid=#{majorid}
+    </delete>
+
+
+    <select id="getMajorByCollegename" resultType="java.util.Map">
+        select m.majorid,m.majorname from major_table as m , college_table as c
+        where c.collegeid=m.collegeid and c.collegename=#{collegename}
+    </select>
+
+    <select id="findByCollegeid" resultType="com.entity.MajorModel">
+        select * from major_table as a where a.collegeid=#{collegeid}
+    </select>
+
+    <select id="findByMajorid" resultType="com.entity.MajorModel">
+      select * from major_table where majorid=#{majorid}
+    </select>
+
+    <select id="findByMajorname" resultType="com.entity.MajorModel">
+      select * from major_table where majorname=#{majorname}
+    </select>
+
+    <select id="findByMJinMid" resultType="java.util.Map">
+        select m.majorid,m.majorname,m.content,m.ctime,c.collegename
+        from major_table as m,college_table as c where m.collegeid=c.collegeid and m.majorid=#{majorid}
+    </select>
+
+    <select id="getCollegeInMajor" resultType="java.lang.Object">
+      select c.collegename from college_table as c,major_table as m
+      where c.collegeid = m.collegeid GROUP BY c.collegename
+    </select>
+
+    <select id="findMJNO" resultType="java.util.Map">
+        select m.majorid,m.majorname,m.content,m.ctime,c.collegename
+        from major_table as m,college_table as c where m.collegeid=c.collegeid
+    </select>
+
+    <select id="findMJLike" resultType="java.util.Map">
+        select m.majorid,m.majorname,m.content,m.ctime,c.collegename
+        from major_table as m,college_table as c
+        where m.collegeid=c.collegeid
+        and (c.collegename like concat('%',#{like},'%') or m.majorname like concat('%',#{like},'%'))
+    </select>
+
+    <select id="findMJCollege" resultType="java.util.Map">
+        select m.majorid,m.majorname,m.content,m.ctime,c.collegename
+        from major_table as m,college_table as c
+        where m.collegeid=c.collegeid and c.collegename=#{college}
+    </select>
+
+    <select id="findMJLikeAndCollege" resultType="java.util.Map">
+        select m.majorid,m.majorname,m.content,m.ctime,c.collegename
+        from major_table as m,college_table as c where m.collegeid=c.collegeid
+        and (c.collegename like concat('%',#{like},'%') or m.majorname like concat('%',#{like},'%'))
+        and c.collegename=#{college}
+    </select>
+
+
+</mapper>

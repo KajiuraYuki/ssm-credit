@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.SelectionMapper">
+
+    <select id="getXueFenBixiu" resultType="java.util.Map">
+       select c.kechengname,c.xuefen from curriculum_table as c,selection_table as s
+       where c.kechengleibie='必修' and c.kechengid=s.kechengid and s.xuehao=#{xuehao}
+    </select>
+
+    <select id="getXueFenXuanxiu" resultType="java.util.Map">
+        select c.kechengname,c.xuefen from curriculum_table as c,selection_table as s
+        where c.kechengleibie='选修' and c.kechengid=s.kechengid and s.xuehao=#{xuehao}
+    </select>
+    <select id="getkechengbiao" resultType="java.util.Map">
+      select c.kechengname,c.kechengleibie,c.classroom,c.xuefen,t.name,c.startweek,c.endweek,c.classweek,c.classsection
+      from selection_table as s,curriculum_table as c,teacher_table as t
+      where t.zhanghu=c.kechengteacher and c.kechengid=s.kechengid and s.xuehao =#{xuehao}
+    </select>
+
+    <select id="findById" resultType="com.entity.SelectionModel">
+      select * from curriculum_table where id =#{id}
+    </select>
+
+    <delete id="deleteRepeat">
+        DELETE a FROM selection_table a,selection_table b
+        WHERE a.id &gt; b.id AND a.kechengid=b.kechengid and a.xuehao=b.xuehao
+    </delete>
+
+    <delete id="deleteById1" >
+      delete from selection_table where id=#{id}
+    </delete>
+
+    <delete id="deleteRepeat1">
+        DELETE a from selection_table a , student_table b
+        where a.xuehao = b.xuehao and not INSTR(#{str},b.banji) and a.kechengid=#{kechengid}
+    </delete>
+
+    <select id="SelectionClass" resultType="java.util.Map">
+        select a.ctime,a.kechengid,a.kechengleibie,a.kechengname,
+        (select count(b.xuehao) from selection_table as b where a.kechengid=b.kechengid) as 'count'
+        from curriculum_table as a where a.kechengteacher=#{kechengteacher} ORDER BY count DESC
+    </select>
+
+    <select id="SelectionClassBixiu" resultType="java.util.Map">
+      select a.ctime,a.kechengid,a.kechengleibie,a.kechengname,
+      (select count(b.xuehao) from selection_table as b where a.kechengid=b.kechengid) as 'count'
+      from curriculum_table as a where a.kechengteacher=#{kechengteacher} and a.kechengleibie='必修' ORDER BY count DESC
+    </select>
+
+    <select id="SelectionClassXuanxiu" resultType="java.util.Map">
+        select a.ctime,a.kechengid,a.kechengleibie,a.kechengname,
+        (select count(b.xuehao) from selection_table as b where a.kechengid=b.kechengid) as 'count'
+        from curriculum_table as a where a.kechengteacher=#{kechengteacher} and a.kechengleibie='选修' ORDER BY count DESC
+    </select>
+
+
+    <select id="SelectionClassLike" resultType="java.util.Map">
+        select a.ctime,a.kechengid,a.kechengleibie,a.kechengname,
+        (select count(b.xuehao) from selection_table as b where a.kechengid=b.kechengid) as 'count'
+        from curriculum_table as a where a.kechengteacher=#{kechengteacher} and a.kechengname like concat('%',#{kechengname},'%') ORDER BY count DESC
+    </select>
+
+    <select id="SelectionClassLikeBiXiu" resultType="java.util.Map">
+      select a.ctime,a.kechengid,a.kechengleibie,a.kechengname,
+      (select count(b.xuehao) from selection_table as b where a.kechengid=b.kechengid) as 'count'
+      from curriculum_table as a where a.kechengteacher=#{kechengteacher}
+      and a.kechengname like concat('%',#{kechengname},'%') and a.kechengleibie='必修' ORDER BY count DESC
+    </select>
+
+    <select id="SelectionClassLikeXuanXiu" resultType="java.util.Map">
+        select a.ctime,a.kechengid,a.kechengleibie,a.kechengname,
+        (select count(b.xuehao) from selection_table as b where a.kechengid=b.kechengid) as 'count'
+        from curriculum_table as a where a.kechengteacher=#{kechengteacher}
+         and a.kechengname like concat('%',#{kechengname},'%') and a.kechengleibie='选修' ORDER BY count DESC
+    </select>
+</mapper>

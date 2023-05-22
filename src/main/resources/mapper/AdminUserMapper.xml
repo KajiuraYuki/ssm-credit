@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.AdminUserMapper">
+    <resultMap id="adminUser" type="com.entity.AdminUser">
+
+    </resultMap>
+
+    <select id="findByZhanghao" resultType="com.entity.AdminUser">
+        select * from admin_table where zhanghao = #{zhanghao}
+    </select>
+
+    <select id="findByZhanghaoAndEmailAndMibao" resultType="com.entity.AdminUser">
+        select * from admin_table
+        where zhanghao = #{zhanghao}
+        and email = #{email} and mibao = #{mibao}
+    </select>
+
+    <select id="getByZhanghaoAndPassword" resultType="com.entity.AdminUser">
+        select * from admin_table
+        where zhanghao = #{zhanghao}
+        and password = #{password}
+    </select>
+
+    <select id="findByZhanghaoAndEmail" resultType="com.entity.AdminUser">
+        select * from admin_table
+        where zhanghao = #{zhanghao}
+        and email=#{email}
+    </select>
+</mapper>

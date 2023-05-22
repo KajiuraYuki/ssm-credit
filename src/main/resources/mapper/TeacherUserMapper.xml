@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.TeacherUserMapper">
+
+    <select id="findByZhanghu" resultType="com.entity.TeacherUser">
+        select * from teacher_table where zhanghu=#{zhanghu}
+    </select>
+    <select id="findByZhanghuAndEmailAndMibao" resultType="com.entity.TeacherUser">
+         select * from teacher_table where zhanghu=#{zhanghu} and email =#{email} and mibao =#{mibao}
+    </select>
+    <select id="getByZhanghuAndPassword" resultType="com.entity.TeacherUser">
+        select * from teacher_table where zhanghu=#{zhanghu} and password =#{password}
+    </select>
+
+    <select id="findByZhanghuAndEmail" resultType="com.entity.TeacherUser">
+      select * from teacher_table where zhanghu=#{zhanghu} and email =#{email}
+    </select>
+
+    <select id="getByCollegegroupJjs" resultType="java.lang.String">
+      select college from teacher_table GROUP BY college
+    </select>
+
+    <select id="getByMajorgroupjs" resultType="java.lang.String">
+      select major from teacher_table GROUP BY major
+    </select>
+
+    <delete id="deleteByZhanghu">
+        delete from teacher_table where zhanghu=#{zhanghu}
+    </delete>
+
+    <select id="findAll" resultType="com.entity.TeacherUser">
+        select * from teacher_table
+    </select>
+</mapper>

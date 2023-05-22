@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.ClassMapper">
+
+    <select id="getByClassroom" resultType="java.lang.String">
+        select classroom from classroom GROUP BY id
+    </select>
+
+    <select id="findAllRooms" resultType="com.entity.Classroom">
+        select * from classroom as c where classroom like concat('%',#{like},'%') ORDER BY classroom
+    </select>
+
+
+    <select id="findByClassroomLike" resultType="com.entity.Classroom">
+        select * from classroom as c where classroom like concat('%',#{like},'%') ORDER BY classroom
+    </select>
+
+    <select id="classroomcheck" resultType="com.entity.Classroom">
+        select * from classroom as c where c.classroom = #{classname}
+    </select>
+
+
+    <delete id="deleteClassroomByName">
+        delete from classroom as c where c.classroom = #{classname}
+    </delete>
+
+    <select id="findAllRoomsByName" resultType="com.entity.Classroom">
+        select * from classroom as c where c.classroom = #{query}
+    </select>
+
+    <select id="findAllRooms2" resultType="com.entity.Classroom">
+        select * from classroom as c
+    </select>
+</mapper>

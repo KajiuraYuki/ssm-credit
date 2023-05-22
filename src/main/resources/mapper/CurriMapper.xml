@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.CurriMapper">
+
+    <select id="findByKechengid" resultType="com.entity.CurriModel">
+        select *
+        from curriculum_table
+        where kechengid = #{kechengid}
+    </select>
+
+    <select id="classroomcheck_curri" resultType="com.entity.CurriModel">
+        select *
+        from curriculum_table as c
+        where c.classroom = #{classroomname} and c.classweek = #{classweek}
+        and c.classsection = #{classsection} and ((c.startweek &lt;= #{startweek} and c.endweek &lt;= #{endweek}) or (c.startweek &lt;= #{startweek}
+         and c.endweek &gt;= #{endweek}) or (c.startweek &gt;= #{startweek}
+         and c.endweek &lt;= #{endweek}) or (c.startweek &gt;= #{startweek} and c.endweek &gt;= #{endweek}))
+    </select>
+
+
+    <select id="getSelectionNum" resultType="java.util.Map">
+      select c.kechengname,(select COUNT(*) from selection_table as s where s.kechengid=c.kechengid) as '选课人数'
+      from curriculum_table as c
+      where c.kechengteacher=#{kechengteacher}
+    </select>
+
+    <delete id="deleteByKechengid">
+      delete from curriculum_table where kechengid=#{kechengid}
+    </delete>
+
+    <select id="findCurriNo" resultType="java.util.Map">
+        select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+        (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,
+        (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'
+        from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%')
+        ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+
+    <select id="findCurriLeixing" resultType="java.util.Map">
+      select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+      (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',
+      b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,
+      (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'
+      from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%')
+      and b.kechengleibie=#{kechengleibie} ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+
+    <select id="findCurriLike" resultType="java.util.Map">
+        select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+        (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',
+        b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,
+        (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'
+        from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%')
+        and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%'))
+        ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+    <select id="findCurriXuefen" resultType="java.util.Map">
+        select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+        (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',
+        b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,
+        (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'
+        from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%')
+        and b.xuefen=#{xuefen} ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+    <select id="findCurriXandLike" resultType="java.util.Map">
+        select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+        (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,(SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'  from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%') and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%')) and b.xuefen=#{xuefen}
+         ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+
+
+    <select id="findCurriXandLeixing" resultType="java.util.Map">
+        select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+        (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',
+        b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,
+        (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'
+         from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%')
+         and b.xuefen=#{xuefen} and b.kechengleibie= #{kechengleibie}
+         ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+
+    <select id="findCurriLandLeibie" resultType="java.util.Map">
+        select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+        (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',
+        b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,
+        (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'
+         from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%')
+         and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%'))
+         and b.kechengleibie=#{kechengleibie} ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+
+    <select id="findCurriAll" resultType="java.util.Map">
+        select b.ctime,b.kechengid,b.classsection,b.kechengname,b.xuefen,
+        (SELECT t.`name` from teacher_table as t where b.kechengteacher=t.zhanghu) as 'teachername',
+        b.kechengleibie,b.startweek,b.endweek,b.classroom,b.classweek,
+        (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao}) as 'selection'
+        from curriculum_table as b where b.optionalclass like CONCAT('%',(select a.banji from student_table as a where a.xuehao=#{xuehao}),'%')
+        and (b.kechengid like concat('%',#{like},'%') or b.kechengname like concat('%',#{like},'%')) and b.kechengleibie=#{kechengleibie} and b.xuefen=#{xuefen}
+        ORDER BY (SELECT COUNT(*) from selection_table as s where s.kechengid=b.kechengid and s.xuehao=#{xuehao})
+    </select>
+
+    <select id="classRoomcheckByClassRoomName" resultType="java.lang.Integer">
+        select count(1) from classroom where classroom=#{classRoomName}
+    </select>
+    <select id="findAll" resultType="com.entity.CurriModel">
+          select * from curriculum_table
+          <where>
+            <if test="kechengname!= null and kechengname!=''" >
+                kechengname = #{kechengname}
+            </if>
+              <if test="kechengleibie!= null and kechengleibie!=''" >
+                  and kechengleibie = #{kechengleibie}
+              </if>
+             <!-- <if test="kechengteacher != null" >
+                  and kechengteacher = #{kechengteacher}
+              </if>-->
+        </where>
+
+    </select>
+</mapper>

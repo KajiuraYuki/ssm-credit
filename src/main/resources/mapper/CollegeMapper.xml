@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.CollegeMapper">
+
+    <select id="findByCollegeid" resultType="com.entity.CollegeModel">
+        select c.* from college_table as c where collegeid=#{collegeid}
+    </select>
+
+    <select id="findByCollegename" resultType="com.entity.CollegeModel">
+        select * from college_table where collegename=#{collegename}
+    </select>
+
+    <select id="getAllNums" resultType="java.util.Map">
+        select c.collegename,(select COUNT(*) from student_table as s
+        where c.collegename=s.college ) as '学生人数',(select COUNT(*) from teacher_table as t
+        where c.collegename=t.college ) as '教师人数' from college_table as c
+    </select>
+
+    <select id="findByCollegenameLike" resultType="com.entity.CollegeModel">
+        select *
+        from college_table
+        <where>
+            <if test="like != null and like !=''">
+                collegename like concat('%',#{like},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByCollegeid">
+        delete from college_table where collegeid=#{collegeid}
+    </delete>
+
+    <select id="findAll" resultType="com.entity.CollegeModel">
+        select c.* from college_table as c
+    </select>
+</mapper>

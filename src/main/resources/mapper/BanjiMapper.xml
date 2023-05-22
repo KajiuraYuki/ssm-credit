@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mapper.BanjiMapper">
+
+    <select id="getBanjiByMajorname" resultType="java.util.Map">
+        select b.banjiid,b.banjiname
+        from banji_table as b,major_table as m
+        where b.majorid=m.majorid and m.majorname=#{majorname}
+    </select>
+
+    <select id="findByMajorid" resultType="com.entity.BanjiModel">
+        select * from banji_table as a where a.majorid=#{majorid}
+    </select>
+
+    <select id="findByBanjiid" resultType="com.entity.BanjiModel">
+        select * from banji_table as a where a.banjiid=#{banjiid}
+    </select>
+
+    <select id="findByBanjiidA" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename,b.content
+        FROM banji_table  b,major_table  m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid and b.banjiid=#{banjiid}
+    </select>
+
+    <select id="findByZhanghu" resultType="com.entity.BanjiModel">
+        select * from banji_table as a
+        where a.majorid=
+        (select c.majorid from major_table as c where c.majorname=(select b.major FROM teacher_table as b WHERE b.zhanghu=#{zhanghu}))
+    </select>
+
+    <delete id="deleteByBanjiid">
+        delete from banji_table
+        where banjiid=#{banjiid}
+    </delete>
+
+    <select id="findBJNO" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+        FROM banji_table  b,major_table  m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid
+    </select>
+
+
+    <select id="findBJLike" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+        FROM banji_table b,major_table m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid and b.majorid=m.majorid
+        and (b.banjiname like CONCAT('%',#{like},'%') or c.collegename like CONCAT('%',#{like},'%') or m.majorname like CONCAT('%',#{like},'%'))
+    </select>
+
+    <select id="findBJCollege" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+        FROM banji_table b,major_table m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid and c.collegename=#{collegename}
+    </select>
+
+    <select id="findBJMajor" resultType="java.util.Map">
+       select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+       FROM banji_table b,major_table m,college_table c
+       where c.collegeid=m.collegeid and b.majorid=m.majorid and m.majorname=#{majorname}
+    </select>
+
+    <select id="findBJLikeAndCollege" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+        FROM banji_table b,major_table m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid and b.majorid=m.majorid
+        and (b.banjiname like CONCAT('%',#{like},'%') or c.collegename like CONCAT('%',#{like},'%') or m.majorname like CONCAT('%',#{like},'%'))
+        and c.collegename=#{collegename}
+    </select>
+
+
+    <select id="findBJLikeAndMajor" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+        FROM banji_table b,major_table m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid and b.majorid=m.majorid
+        and (b.banjiname like CONCAT('%',#{like},'%') or c.collegename like CONCAT('%',#{like},'%') or m.majorname like CONCAT('%',#{like},'%')) and m.majorname=#{majorname}
+    </select>
+
+
+    <select id="findBJCollegeAndMajor" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+        FROM banji_table b,major_table m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid and c.collegename=#{collegename} and m.majorname=#{majorname}
+    </select>
+
+
+    <select id="findBJLAll" resultType="java.util.Map">
+        select b.ctime,b.banjiid,b.banjiname,m.majorid,m.majorname,c.collegeid,c.collegename
+        FROM banji_table b,major_table m,college_table c
+        where c.collegeid=m.collegeid and b.majorid=m.majorid and b.majorid=m.majorid
+        and (b.banjiname like CONCAT('%',#{like},'%') or c.collegename like CONCAT('%',#{like},'%') or m.majorname like CONCAT('%',#{like},'%')) and c.collegename=#{collegename} and m.majorname=#{majorname}
+    </select>
+
+</mapper>
